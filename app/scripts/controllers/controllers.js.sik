@@ -1,0 +1,91 @@
+'use strict';
+
+/* Controllers */
+
+var app = angular.module('uoa_eresearch.controllers', []);
+
+
+// Clear browser cache (in development mode)
+//
+// http://stackoverflow.com/questions/14718826/angularjs-disable-partial-caching-on-dev-machine
+//app.run(function ($rootScope, $templateCache) {
+//  $rootScope.$on('$viewContentLoaded', function () {
+//    $templateCache.removeAll();
+//  });
+//});
+
+app.controller('PersonListCtrl', ['$scope', 'PersonListFactory', 'DivisionFactory', '$location',
+  function ($scope, PersonListFactory, DivisionFactory, $location) {
+
+    /* callback for ng-click 'showPerson': */
+    $scope.showPerson = function(personId) {
+      $location.path('/person/' + personId);
+    };
+
+    var rawDivisions = DivisionFactory.show();
+    var divisionsLoaded = 0;
+    rawDivisions.$promise.then(function(result) { // this is only run after divisions have been loaded
+       var divisions = {}
+       result.map(function(division) { 
+         var tmp = division['name']
+         if ('parent' in division) {
+           tmp = division['parent']['name'] + ' - ' + tmp;
+           if ('parent' in division['parent']) {
+             tmp = division['parent']['parent']['name'] + ' - ' + tmp;
+           }
+         }
+         divisions[division['code']] = tmp;
+       });
+       $scope.divisions = divisions;
+       divisionsLoaded = 1;
+    });
+    var persons = PersonListFactory.show();
+    persons.$promise.then(function(result) { // this is only run after persons have been loaded
+       result.map(function(person) {
+         if ('affiliations' in person) {
+           person['affiliationString'] = $scope.divisions[person['affiliations'][0]['division']]; 
+         } else {
+           console.log(person);
+         }
+       });
+    });    
+    $scope.persons = persons;
+    //$scope.persons = PersonListFactory.show();
+    $scope.sortType = 'fullName';
+    $scope.sortReverse = false;
+  }
+]);
+
+app.controller('ProjectListCtrl', ['$scope', 'ProjectListFactory', '$location',
+  function ($scope, ProjectListFactory, $location) {
+
+    /* callback for ng-click 'showPerson': */
+    $scope.showProject = function(projectId) {
+      $location.path('/project/' + projectId);
+    };
+
+    $scope.projects = ProjectListFactory.show();
+    $scope.sortType = 'startDate';
+    $scope.sortReverse = true;
+  }
+]);
+
+app.controller('PersonCtrl', ['$scope', '$routeParams', 'PersonFactory',
+  function ($scope, $routeParams, PersonFactory, $location) {
+    $scope.person = PersonFactory.show({id: $routeParams.id});
+  }
+]);
+
+app.controller('ProjectWrapperCtrl', ['$scope', '$routeParams', 'ProjectWrapperFactory',
+  function ($scope, $routeParams, ProjectWrapperFactory, $location) {
+    $scope.projectWrapper = ProjectWrapperFactory.show({id: $routeParams.id});
+  }
+]);
+
+app.controller('PersonProjectCtrl', ['$scope', '$routeParams', 'PersonProjectFactory',
+  function ($scope, $routeParams, PersonProjectFactory, $location) {
+    $scope.personProjects = PersonProjectFactory.getProjectsForPersonId({id: $routeParams.id});
+    $scope.sortType = 'project.startDate';
+    $scope.sortReverse = true;
+  }
+]);

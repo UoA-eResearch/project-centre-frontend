@@ -1,0 +1,58 @@
+<div>
+
+  <h3>List of people involved in eResearch projects</h3>
+
+  <form class="navbar-form navbar-top" role="search">
+    <div class="form-group">
+        <i class="fa fa-search"></i>
+        <input type="text" class="form-control" placeholder="Search..." ng-model="searchTerm">
+        <!--
+          <button ng-click="createNewPerson()" class="btn btn-primary btn-sm">Create new Person</button>
+        -->
+    </div>
+  </form>
+
+  <table class="table table-striped" ng-controller='PersonListCtrl'>
+    <thead>
+      <tr>
+          <td>
+            <a ng-click="sortType='fullName'; sortReverse=!sortReverse">
+              Full Name
+              <span ng-show="sortType == 'fullName' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'fullName' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='affiliationString'; sortReverse=!sortReverse">
+              Affiliation
+              <span ng-show="sortType == 'affiliationString' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'affiliationString' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='startDate'; sortReverse=!sortReverse">
+              First Day 
+              <span ng-show="sortType == 'startDate' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'startDate' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='endDate'; sortReverse=!sortReverse">
+              Last Day
+              <span ng-show="sortType == 'endDate' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'endDate' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+       </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="person in persons | orderBy:sortType:sortReverse | filter:searchTerm">
+          <td><a ui-sref="people.person({ personId: person.id })">{{person.fullName}}</a></td>
+          <td>{{person.affiliationString}}</td>
+          <td>{{person.startDate}}</td>
+          <td>{{person.endDate}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

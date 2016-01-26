@@ -1,0 +1,59 @@
+<div>
+  
+  <h3>List of Project KPIs</h3>
+
+  <table class="table table-striped" ng-controller='ProjectKpiListCtrl'>
+    <thead>
+      <tr>
+          <td>
+            <a ng-click="sortType='date'; sortReverse=!sortReverse">Date
+              <span ng-show="sortType == 'date' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'date' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='kpi'; sortReverse=!sortReverse">KPI
+              <span ng-show="sortType == 'kpi' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'kpi' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='kpiCategory.name'; sortReverse=!sortReverse">Category
+              <span ng-show="sortType == 'kpiCategory.name' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'kpiCategory.name' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='value'; sortReverse=!sortReverse">Value
+              <span ng-show="sortType == 'value' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'value' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='projectCode'; sortReverse=!sortReverse">Project
+              <span ng-show="sortType == 'projectCode' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'projectCode' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='personFullName'; sortReverse=!sortReverse">Reported by
+              <span ng-show="sortType == 'personFullName' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'personFullName' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+       </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="projectKpi in projectKpis| orderBy:sortType:sortReverse | filter:searchTerm">
+          <td>{{projectKpi.date}}</td>
+          <td>{{projectKpi.kpi.type}}-{{projectKpi.kpi.number}}: {{projectKpi.kpi.title}}</td>
+          <td>{{projectKpi.kpiCategory.name}}</td>
+          <td>{{projectKpi.value}}</td>
+          <td><a ui-sref="projects.project({ projectId: projectKpi.projectId })">{{projectKpi.projectCode}}</a></td>
+          <td><a ui-sref="people.person({ personId: projectKpi.personId})">{{projectKpi.personFullName}}</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+

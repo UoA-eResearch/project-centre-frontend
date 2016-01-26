@@ -1,0 +1,80 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>UoA eResearch Portal</title>
+  <link rel="stylesheet" href="styles/main.css"></link>
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"></link>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+  <script src="bower_components/ui-breadcrumb/dist/ui-breadcrumb.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/services/services.js"></script>
+  <script src="scripts/controllers/controllers.js"></script>
+  <script>
+    var basePath = '/project_centre';
+    var redirectHash = '';
+    var redirectPath;
+    function saml_login() {
+      if (redirectPath === undefined) {
+        redirectPath = basePath;
+      }
+      var url = 'saml_login.html?redirectTo=' + redirectPath + '&hash=' + redirectHash;
+      window.location.href = url
+    }
+    function logout() {
+      var expires = 'Thu, 01 Jan 1970 00:00:00 UTC';
+      document.cookie = "eresearch=;expires=" + expires + ";path=/project_centre";
+      //window.location.href = '#/logged_out';
+    }
+  </script>
+</head>
+
+<body ng-app="uoa_eresearch">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <div class="head">
+        <nobr>
+        <a href="http://www.auckland.ac.nz" class="logo" title="The University of Auckland" tabindex="-1">
+          <img src="pics/uoa.jpg" alt="The University of Auckland" />
+        </a>
+        e-Research Project Centre 
+        <div class="topcorner" ng-controller="LoginCtrl">
+          <button ng-show="!isLoggedIn" onclick="saml_login()" class="btn btn-primary btn-lg">Log in</button>
+          <button ui-sref='logged-out' ng-show="isLoggedIn" onclick="logout()" class="btn btn-primary btn-lg">Log out</button>
+        </div>
+        </nobr>
+    </div>
+
+    <div ng-show="isLoggedIn">
+      <ul class="nav nav-tabs" ng-show="isLoggedIn" ng-controller='LoginCtrl'>
+        <li class="active"><a ui-sref="home">Home</a></li>
+        <li class="active"><a ui-sref='projects'>Projects</a></li>
+        <li class="active"><a ui-sref='people'>People</a></li>
+        <li class="active"><a ui-sref='researchoutputs'>Research Output</a></li>
+        <li class="active"><a ui-sref='kpis'>KPIs</a></li>
+      </ul>
+      <ui-breadcrumb></ui-breadcrumb>
+    </div>
+    <!-- Add your site or application content here -->
+    <!-- <div ui-view></div> -->
+    <div class="container-fluid" ui-view="main"></div>
+
+</body>
+</html>

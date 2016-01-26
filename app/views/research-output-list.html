@@ -1,0 +1,52 @@
+<div>
+  
+  <h3>List of research outputs</h3>
+
+  <table class="table table-striped" ng-controller='ResearchOutputListCtrl'>
+    <thead>
+      <tr>
+          <td>
+            <a ng-click="sortType='date'; sortReverse=!sortReverse">Date
+              <span ng-show="sortType == 'date' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'date' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='typeName'; sortReverse=!sortReverse">Type
+              <span ng-show="sortType == 'typeName' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'typeName' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='description'; sortReverse=!sortReverse">Citation/Description
+              <span ng-show="sortType == 'description' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'description' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='projectCode'; sortReverse=!sortReverse">Project
+              <span ng-show="sortType == 'projectCode' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'projectCode' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='personFullName'; sortReverse=!sortReverse">Reported by
+              <span ng-show="sortType == 'personFullName' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'personFullName' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+       </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="researchOutput in researchOutputs| orderBy:sortType:sortReverse | filter:searchTerm">
+          <td>{{researchOutput.date}}</td>
+          <td><nobr>{{researchOutput.typeName}}</nobr></td>
+          <td>{{researchOutput.description}}</td>
+          <td><a ui-sref="projects.project({ projectId: researchOutput.projectId })">{{researchOutput.projectCode}}</a></td>
+          <td><a ui-sref="people.person({ personId: researchOutput.personId })"><nobr>{{researchOutput.personFullName}}</nobr></a></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+

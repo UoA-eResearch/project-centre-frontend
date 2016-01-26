@@ -1,0 +1,57 @@
+<div>
+  
+  <h3>List of projects</h3>
+
+  <form class="navbar-form navbar-top" role="search">
+    <div class="form-group">
+        <i class="fa fa-search"></i>
+        <input type="text" class="form-control" placeholder="Search..." ng-model="searchTerm">
+        <!--
+          <button ng-click="createNewProject()" class="btn btn-primary btn-sm">Create new project</button>
+        -->
+    </div>
+  </form>
+
+  <table class="table table-striped" ng-controller='ProjectListCtrl'>
+    <thead>
+      <tr>
+          <td>
+            <a ng-click="sortType='title'; sortReverse=!sortReverse">Title
+              <span ng-show="sortType == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'title' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='code'; sortReverse=!sortReverse">Code 
+              <span ng-show="sortType == 'code' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'code' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='status'; sortReverse=!sortReverse">Status 
+              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sortType='affiliationString'; sortReverse=!sortReverse">
+              Affiliation
+              <span ng-show="sortType == 'affiliationString' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'affiliationString' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+       </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="project in projects | orderBy:sortType:sortReverse | filter:searchTerm">
+          <!--<td><a href="#/project/{{project.id}}" class="link">{{project.title}}</a></td>-->
+          <td><a ui-sref="projects.project({ projectId: project.id })">{{project.title}}</a></td>
+          <td>{{project.code}}</td>
+          <td>{{project.status}}</td>
+          <td>{{project.affiliationString}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+

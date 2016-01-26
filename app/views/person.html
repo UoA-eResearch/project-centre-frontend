@@ -1,0 +1,112 @@
+<div>
+
+  <div ng-controller='PersonCtrl'>
+  <table>
+    <tr>
+      <td width="160px" valign="top">
+        <img width="126px" src="{{person.pictureUrl}}"></img>
+      </td>
+      <td>
+        <table class="table-condensed borderless">
+          <tr>
+            <td>Name:</td>
+            <td><b>{{person.fullName}}</b></td>
+          </tr>
+          <tr>
+            <td>Affiliation:</td>
+            <td ng-repeat="affil in person.affiliations">
+              {{affil['divisionString']}} ({{affil['role']}})
+            </td>
+          </tr>
+          <tr>
+            <td>E-mail:</td>
+            <td><a href="mailto:{{person.email}}">{{person.email}}</a></td>
+          </tr>
+          <tr>
+            <td>Phone:</td>
+            <td>{{person.phone}}</td>
+          </tr>
+          <tr>
+            <td>Status:</td>
+            <td>{{person.status}}</td>
+          </tr>
+          <tr>
+            <td>Start Date:</td>
+            <td>{{person.startDate}}</td>
+          </tr>
+          <tr>
+            <td>End Date:</td>
+            <td>{{person.endDate}}</td>
+          </tr>
+          <tr>
+            <td><nobr>Preferred Name:</nobr></td>
+            <td>{{person.preferredName}}</td>
+          </tr>
+          <tr>
+            <td>Notes:</td>
+            <td>{{person.notes}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    </table>
+  </div>
+
+  <hr>
+  <h4>Projects</h4>
+
+  <table class="table table-striped" ng-controller='PersonProjectCtrl'>
+    <thead>
+      <tr>
+          <td>
+            <nobr><a ng-click="sortType='project.title'; sortReverse=!sortReverse">Title 
+              <span ng-show="sortType == 'project.title' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'project.title' && sortReverse" class="fa fa-caret-up"></span>
+            </a></nobr>
+          </td>
+          <td>
+            <nobr><a ng-click="sortType='project.status'; sortReverse=!sortReverse">Status
+              <span ng-show="sortType == 'project.status' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'project.status' && sortReverse" class="fa fa-caret-up"></span>
+            </a></nobr>
+          </td>
+          <td>
+            <nobr><a ng-click="sortType='personRole'; sortReverse=!sortReverse">Role on project
+              <span ng-show="sortType == 'personRole' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'personRole' && sortReverse" class="fa fa-caret-up"></span>
+            </a></nobr>
+          </td>
+          <td>
+            <nobr><a ng-click="sortType='project.code'; sortReverse=!sortReverse">Code
+              <span ng-show="sortType == 'project.code' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'project.code' && sortReverse" class="fa fa-caret-up"></span>
+            </a></nobr>
+          </td>
+          <td>
+            <nobr><a ng-click="sortType='project.startDate'; sortReverse=!sortReverse">First day
+              <span ng-show="sortType == 'project.startDate' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'project.startDate' && sortReverse" class="fa fa-caret-up"></span>
+            </a></nobr>
+          </td>
+          <td>
+            <nobr><a ng-click="sortType='project.endDate'; sortReverse=!sortReverse">Last day
+              <span ng-show="sortType == 'project.endDate' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'project.endDate' && sortReverse" class="fa fa-caret-up"></span>
+            </a></nobr>
+          </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="pp in personProjects | orderBy:sortType:sortReverse">
+          <td><a ui-sref="projects.project({ projectId: pp.project.id })">{{pp.project.title}}</a></td>
+          <td><nobr>{{pp.project.status}}</nobr></td>
+          <td><nobr>{{pp.personRoleName}}</nobr></td>
+          <td>{{pp.project.code}}</td>
+          <td>{{pp.project.startDate}}</td>
+          <td>{{pp.project.endDate}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
