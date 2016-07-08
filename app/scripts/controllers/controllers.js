@@ -29,6 +29,19 @@ function createDivisionAffiliationString(rawDivisisions) {
   return divisions; 
 }
 
+function handleLoginStatus($rootScope, $location) {
+  if (!$rootScope.isLoggedIn) {
+    redirectPath = window.location.href.split('#')[0];
+    var hash = window.location.hash.slice(1);
+    if (hash != '/not_logged_in') {
+      redirectHash = hash;
+    }
+    console.log(redirectPath);
+    console.log(redirectHash);
+    $location.path('/not_logged_in');
+  }
+}
+
 app.controller('PersonListCtrl', ['$rootScope', '$scope', 'PersonListFactory', 'DivisionFactory', '$location', '$q',
   function ($rootScope, $scope, PersonListFactory, DivisionFactory, $location, $q) {
 
