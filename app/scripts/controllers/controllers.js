@@ -3,7 +3,6 @@
 /* Controllers */
 
 var app = angular.module('uoa_eresearch.controllers', []);
-var rawDivisions;
 
 // Clear browser cache (in development mode)
 //
@@ -14,17 +13,18 @@ var rawDivisions;
 //  });
 //});
 
-function createDivisionAffiliationString(rawDivisisions) {
+function createDivisionAffiliationString(rawDivisions) {
   // create hierarchical division strings for each division
   var divisions = {}
   rawDivisions.map(function(division) {
     var tmp = division['name']
-    var code = division['code']
-    while('parent' in division) {
+    var id = division['id']
+    //while('parent' in division) {
+    while (division['parent'] != null) {
       tmp = division['parent']['name'] + ' - ' + tmp;
       division = division['parent'];
     }
-    divisions[code] = tmp;
+    divisions[id] = tmp;
   });
   return divisions; 
 }
@@ -52,9 +52,7 @@ app.controller('PersonListCtrl', ['$rootScope', '$scope', 'PersonListFactory', '
 
     // load divisions and persons
     var persons = PersonListFactory.show();
-    if (rawDivisions === undefined) {
-      rawDivisions = DivisionFactory.show();
-    }
+    var rawDivisions = DivisionFactory.show();
 
     // after divisions and persons have been loaded
     $q.all([rawDivisions.$promise, persons.$promise]).then(function(data) {
@@ -64,7 +62,7 @@ app.controller('PersonListCtrl', ['$rootScope', '$scope', 'PersonListFactory', '
        // augment person with hierarchical affiliation string
        data[1].map(function(person) {
          if ('affiliations' in person) {
-           person['affiliationString'] = divisions[person['affiliations'][0]['division']]; 
+           person['affiliationString'] = divisions[person['affiliations'][0]['division']['id']]; 
          } else {
            person['affiliationString'] = 'N/A';
          }
@@ -73,7 +71,7 @@ app.controller('PersonListCtrl', ['$rootScope', '$scope', 'PersonListFactory', '
        $scope.divisions = divisions;
        $scope.persons = persons;
     }).catch(function(data) {
-       if (data.status === -1) {
+       if (data.status === -1) { // -1 means no tuakiri session
          $rootScope.isLoggedIn = false;
          handleLoginStatus($rootScope, $location);
        }
@@ -92,9 +90,7 @@ app.controller('ProjectListCtrl', ['$rootScope', '$scope', 'ProjectListFactory',
     };
 
     var projects = ProjectListFactory.show();
-    if (rawDivisions === undefined) {
-      rawDivisions = DivisionFactory.show();
-    }
+    var rawDivisions = DivisionFactory.show();
 
     // after divisions and persons have been loaded
     $q.all([rawDivisions.$promise, projects.$promise]).then(function(data) {
@@ -104,7 +100,7 @@ app.controller('ProjectListCtrl', ['$rootScope', '$scope', 'ProjectListFactory',
        // augment project with hierarchical affiliation string
        data[1].map(function(project) {
          if ('divisions' in project) {
-           project['affiliationString'] = divisions[project['divisions'][0]];       
+           project['affiliationString'] = divisions[project['divisions'][0]['division']['id']];       
          } else {
            project['affiliationString'] = 'N/A';
          }
@@ -113,6 +109,7 @@ app.controller('ProjectListCtrl', ['$rootScope', '$scope', 'ProjectListFactory',
        $scope.divisions = divisions;
        $scope.projects = projects;
     }).catch(function(data) {
+       console.warn(data);
        if (data.status === -1) {
          $rootScope.isLoggedIn = false;
          handleLoginStatus($rootScope, $location);
@@ -129,9 +126,8 @@ app.controller('PersonCtrl', ['$rootScope', '$scope', '$stateParams', 'PersonFac
     var person = PersonFactory.show({id: $stateParams.personId});
     $rootScope.breadcrumbPersonPromise = person.$promise;
 
-    if (rawDivisions === undefined) {
-      rawDivisions = DivisionFactory.show();
-    }
+    var rawDivisions = DivisionFactory.show();
+
     // after divisions and person have been loaded
     $q.all([rawDivisions.$promise, person.$promise]).then(function(data) {
        // create hierarchical division strings for each division
@@ -139,7 +135,7 @@ app.controller('PersonCtrl', ['$rootScope', '$scope', '$stateParams', 'PersonFac
 
        // augment person with hierarchical affiliation string
        person['affiliations'].map(function(affil) {
-         affil['divisionString'] = divisions[affil['division']];
+         affil['divisionString'] = divisions[affil['division']['id']];
        });
 
        $scope.divisions = divisions;
@@ -164,23 +160,28 @@ app.controller('ProjectWrapperCtrl', ['$rootScope', '$scope', '$stateParams', 'P
     // load divisions and project
     var projectWrapper = ProjectWrapperFactory.show({id: $stateParams.projectId});
     $rootScope.breadcrumbProjectWrapperPromise = projectWrapper.$promise;
-    if (rawDivisions === undefined) {
-      rawDivisions = DivisionFactory.show();
-    }
+    var rawDivisions = DivisionFactory.show();
 
     // after divisions and person have been loaded
     $q.all([rawDivisions.$promise, projectWrapper.$promise]).then(function(data) {
        // create hierarchical division strings for each division
        var divisions = createDivisionAffiliationString(data[0]);
 
-       // augment projectWrapper with hierarchical affiliation string
        var divisionStrings = [];
        // augment projectWrapper['project'] with hierarchical affiliation string
-       projectWrapper['project']['divisions'].map(function(division) {
-         divisionStrings.push(divisions[division]);
+       projectWrapper['project']['divisions'].map(function(projectDivision) {
+         divisionStrings.push(divisions[projectDivision['division']['id']]);
+       });
+       projectWrapper['project']['divisionStrings'] = divisionStrings;
+
+       // augment projectWrapper['personProjects'] with hierarchical affiliation string
+       projectWrapper['members'].map(function(personProject) {
+         personProject['person']['affiliations'].map(function(personAffiliation) {
+           personAffiliation['divisionName'] = divisions[personAffiliation['division']['id']];
+         });
        });
 
-       projectWrapper['project']['divisionStrings'] = divisionStrings;
+
        $scope.projectWrapper = projectWrapper;
     }).catch(function(data) {
        if (data.status === -1) {

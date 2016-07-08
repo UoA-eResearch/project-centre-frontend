@@ -62,10 +62,10 @@
             </a>
           </td>
           <td>
-            <a ng-click="pSortType='person.affiliations[0].role'; pSortReverse=!pSortReverse">
-              Institutional Role
-              <span ng-show="pSortType == 'person.affiliations[0].role' && !pSortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="pSortType == 'person.affiliations[0].role' && pSortReverse" class="fa fa-caret-up"></span>
+            <a ng-click="pSortType='person.affiliations[0].divisionName'; pSortReverse=!pSortReverse">
+              Division 
+              <span ng-show="pSortType == 'person.affiliations[0].divisionName' && !pSortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="pSortType == 'person.affiliations[0].divisionName' && pSortReverse" class="fa fa-caret-up"></span>
             </a>
           </td>
           <td>
@@ -78,11 +78,17 @@
        </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="personProject in projectWrapper.personProjects| orderBy:pSortType:pSortReverse | filter:searchTerm">
-          <td><a ui-sref="people.person({ personId: personProject.person.id })">{{personProject.person.fullName}}</a></td>
-          <td>{{personProject.personRoleName}}</td>
-          <td>{{personProject.person.affiliations[0].role}}</td>
-          <td>{{personProject.notes}}</td>
+      <tr ng-repeat="member in projectWrapper.members| orderBy:pSortType:pSortReverse | filter:searchTerm">
+          <td><a ui-sref="people.person({ personId: member.person.id })">{{member.person.fullName}}</a></td>
+          <td>{{member.role}}</td>
+          <td>
+            <!-- FIXME: sorting doesn't work -->
+            <span ng-repeat="affiliation in member.person.affiliations">
+              {{affiliation.divisionName}}<br/>
+            </span>
+
+          </td>
+          <td>{{member.notes}}</td>
       </tr>
     </tbody>
   </table>
@@ -106,13 +112,6 @@
             </a>
           </td>
           <td>
-            <a ng-click="roSortType='personFullName'; roSortReverse=!ortReverse">
-              Reported by
-              <span ng-show="roSortType == 'personFullName' && !roSortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="roSortType == 'personFullName' && roSortReverse" class="fa fa-caret-up"></span>
-            </a>
-          </td>
-          <td>
             <a ng-click="roSortType='typeName'; roSortReverse=!roSortReverse">
               Type
               <span ng-show="roSortType == 'typeName' && !roSortReverse" class="fa fa-caret-down"></span>
@@ -130,9 +129,8 @@
     </thead>
     <tbody>
       <tr ng-repeat="researchOutput in projectWrapper.researchOutputs | orderBy:roSortType:roSortReverse | filter:searchTerm">
-          <td>{{researchOutput.date}}</td>
-          <td><nobr><a ui-sref="people.person({ personId: researchOutput.personId })">{{researchOutput.personFullName}}</a></nobr></td>
-          <td>{{researchOutput.typeName}}</td>
+          <td>{{researchOutput.dateReported}}</td>
+          <td>{{researchOutput.type}}</td>
           <td>{{researchOutput.description}}</td>
       </tr>
     </tbody>
@@ -228,15 +226,15 @@
           <td>
             <a ng-click="sortType='type'; sortReverse=!sortReverse">
               Type 
-              <span ng-show="paSortType == 'type' && !paSortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="paSortType == 'type' && paSortReverse" class="fa fa-caret-up"></span>
+              <span ng-show="paSortType == 'actionType' && !paSortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="paSortType == 'actionType' && paSortReverse" class="fa fa-caret-up"></span>
             </a>
           </td>
           <td>
             <a ng-click="sortType='reportedBy'; sortReverse=!sortReverse">
               Reported by
-              <span ng-show="paSortType == 'personFullName' && !paSortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="paSortType == 'personFullName' && paSortReverse" class="fa fa-caret-up"></span>
+              <span ng-show="paSortType == 'personName' && !paSortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="paSortType == 'personName' && paSortReverse" class="fa fa-caret-up"></span>
             </a>
           </td>
           <td>
@@ -251,8 +249,8 @@
     <tbody>
       <tr ng-repeat="projectAction in projectWrapper.projectActions | orderBy:paSortType:paSortReverse | filter:searchTerm">
           <td>{{projectAction.date}}</td>
-          <td>{{projectAction.actionTypeName}}</td>
-          <td><nobr><a ui-sref="people.person({ personId: projectAction.personId })">{{projectAction.personFullName}}</a></nobr></td>
+          <td>{{projectAction.actionType}}</td>
+          <td><nobr><a ui-sref="people.person({ personId: projectAction.personId })">{{projectAction.personName}}</a></nobr></td>
           <td><p ng-bind-html="projectAction.notes"></p></td>
       </tr>
     </tbody>
@@ -314,6 +312,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+          <!--
           <td>
             <a ng-click="sortType='facility'; sortReverse=!sortReverse">
               Facility
@@ -321,6 +320,7 @@
               <span ng-show="sortType == 'facility' && sortReverse" class="fa fa-caret-up"></span>
             </a>
           </td>
+          -->
           <td>
             <a ng-click="sortType='propertyName'; sortReverse=!sortReverse">
               Property Name
@@ -339,7 +339,7 @@
     </thead>
     <tbody>
       <tr ng-repeat="projectProperty in projectWrapper.projectProperties | orderBy:sortType:sortReverse | filter:searchTerm">
-          <td>{{projectProperty.facilityName}}</td>
+          <!-- <td>{{projectProperty.facilityName}}</td> -->
           <td>{{projectProperty.propname}}</td>
           <td>{{projectProperty.propvalue}}</td>
       </tr>

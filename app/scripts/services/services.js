@@ -24,24 +24,31 @@ services.factory('PersonFactory', function ($resource, appConfig) {
 });
 
 services.factory('ProjectWrapperFactory', function ($resource, appConfig) {
-    var url = appConfig.apiBaseUrl + '/projectWrapper/:id';
+    var url = appConfig.apiBaseUrl + '/project/:id/wrapper';
     return $resource(url, {}, {
        show : { method: 'GET', params: {id: '@id'} }
     });
 });
 
 services.factory('PersonProjectFactory', function ($resource, appConfig) {
-    var url = appConfig.apiBaseUrl + '/personProject';
+    var url = appConfig.apiBaseUrl + '/person/:id/projects';
     return $resource(url, {}, {
-       getProjectsForPersonId: { method: 'GET', url: url + '/findByPersonId/:id', params: {id: '@id'}, isArray: true }
+       getProjectsForPersonId: { method: 'GET', params: {id: '@id'}, isArray: true }
     });
 });
 
 services.factory('DivisionFactory', function ($resource, appConfig) {
-    var url = appConfig.apiBaseUrl + '/division';
+    var url = appConfig.apiBaseUrl + '/util/division';
     return $resource(url, {}, {
-        show: { method: 'GET', isArray: true }
-    });
+        show: { method: 'GET', isArray: true, cache: false }
+      });
+});
+
+services.factory('DivisionalRoleFactory', function ($resource, appConfig) {
+    var url = appConfig.apiBaseUrl + '/util/divisionalRole';
+    return $resource(url, {}, {
+        show: { method: 'GET', isArray: true, cache: true }
+      });
 });
 
 services.factory('ResearchOutputListFactory', function ($resource, appConfig) {

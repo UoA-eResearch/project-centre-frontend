@@ -15,7 +15,7 @@
           <tr>
             <td>Affiliation:</td>
             <td ng-repeat="affil in person.affiliations">
-              {{affil['divisionString']}} ({{affil['role']}})
+              {{affil['divisionString']}} ({{affil['divisionalRole']}})
             </td>
           </tr>
           <tr>
@@ -71,9 +71,9 @@
             </a></nobr>
           </td>
           <td>
-            <nobr><a ng-click="sortType='personRole'; sortReverse=!sortReverse">Role on project
-              <span ng-show="sortType == 'personRole' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'personRole' && sortReverse" class="fa fa-caret-up"></span>
+            <nobr><a ng-click="sortType='role'; sortReverse=!sortReverse">Role on project
+              <span ng-show="sortType == 'role' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'role' && sortReverse" class="fa fa-caret-up"></span>
             </a></nobr>
           </td>
           <td>
@@ -100,7 +100,7 @@
       <tr ng-repeat="pp in personProjects | orderBy:sortType:sortReverse">
           <td><a ui-sref="projects.project({ projectId: pp.project.id })">{{pp.project.title}}</a></td>
           <td><nobr>{{pp.project.status}}</nobr></td>
-          <td><nobr>{{pp.personRoleName}}</nobr></td>
+          <td><nobr>{{pp.role}}</nobr></td>
           <td>{{pp.project.code}}</td>
           <td>{{pp.project.startDate}}</td>
           <td>{{pp.project.endDate}}</td>
