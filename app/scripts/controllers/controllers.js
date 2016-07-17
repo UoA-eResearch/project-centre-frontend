@@ -200,6 +200,7 @@ app.controller('ProjectWrapperCtrl', ['$rootScope', '$scope', '$stateParams', 'P
     $scope.kpiSortType = 'date';
     $scope.erSortReverse = true;
     $scope.erSortType = 'date';
+    $scope.sSortType = 'service';
   }
 
 ]);

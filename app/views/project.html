@@ -32,7 +32,7 @@
       </tr>
       <tr>
           <td valign="top">Notes:</td>
-          <td>{{projectWrapper.project.notes}}</td>
+          <td><p ng-bind-html="projectWrapper.project.notes"></p></td>
       </tr>
       <tr>
           <td valign="top">ToDo:</td>
@@ -92,6 +92,54 @@
       </tr>
     </tbody>
   </table>
+
+  <hr/>
+
+  <h3>Services used</h3>
+
+  <div ng-if="projectWrapper.serviceInstances.length < 1">
+    N/A
+  </div>
+  <div ng-if="projectWrapper.serviceInstances.length > 0">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+          <td>
+            <a ng-click="sSortType='service'; sSortReverse=!sSortReverse">
+              Service
+              <span ng-show="sSortType == 'service' && !sSortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sSortType == 'service' && sSortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sSortType='status'; sSortReverse=!sSortReverse">
+              Status
+              <span ng-show="sSortType == 'status' && !sSortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sSortType == 'status' && sSortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td>
+            <a ng-click="sSortType=''; sSortReverse=!sSortReverse">
+              Details 
+              <span ng-show="sSortType == 'details' && !sSortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sSortType == 'details' && sSortReverse" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+       </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="serviceInstance in projectWrapper.serviceInstances | orderBy:sSortType:sSortReverse | filter:searchTerm">
+          <td>{{serviceInstance.serviceName}}</td>
+          <td>{{serviceInstance.status}}</td>
+          <td>
+            <div ng-switch on="serviceInstance.serviceName">
+              <div vm-service-instance ng-switch-when="Research VM Service"></div>
+            </div>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 
   <hr/>
 

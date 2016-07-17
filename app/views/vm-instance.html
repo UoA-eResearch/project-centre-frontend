@@ -1,0 +1,39 @@
+<table class="table-condensed">
+ <tr>
+  <td><b>Names</b></td>
+  <td>
+    <span ng-repeat="name in serviceInstance.instance.names">{{name}}, </span>
+  </td>
+ </tr>
+ <tr>
+  <td><b>OS</b></td>
+  <td>{{serviceInstance.instance.os}}</td>
+ </tr>
+ <tr>
+  <td><b>CPUs</b></td>
+  <td>{{serviceInstance.instance.cpus}}</td>
+ </tr>
+ <tr>
+  <td><b>Memory</b></td>
+  <td>{{serviceInstance.instance.memory}}</td>
+ </tr>
+ <tr>
+  <td valign="top"><b>Storage</b></td>
+  <td>
+   <table class="table-condensed">
+    <thead>
+     <th>Mountpoint</th>
+     <th>Type</th>
+     <th>Size</th>
+    </thead>
+    <tbody>     
+     <tr ng-repeat="storage in serviceInstance.instance.storage">
+      <td>{{storage.mountpoint}}</td>
+      <td>{{storage.type}}</td>
+      <td>{{storage.size}}</td>
+     </tr>
+    </tbody>
+   </table>
+  </td>
+ </tr>
+</table>

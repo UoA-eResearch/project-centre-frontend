@@ -117,6 +117,11 @@ angular
       /* http://stackoverflow.com/questions/17289195/angularjs-post-data-to-external-rest-api */
       $httpProvider.defaults.useXDomain = true;
       delete $httpProvider.defaults.headers.common['X-Requested-With'];})
+   .directive('vmServiceInstance', function() {
+       return {
+           templateUrl : 'views/vm-instance.html'
+       }
+   })
   .constant(
       'appConfig', {
          'apiBaseUrl': '__REST_API_BASE_URL__'

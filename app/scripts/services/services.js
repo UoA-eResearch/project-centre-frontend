@@ -24,7 +24,7 @@ services.factory('PersonFactory', function ($resource, appConfig) {
 });
 
 services.factory('ProjectWrapperFactory', function ($resource, appConfig) {
-    var url = appConfig.apiBaseUrl + '/project/:id/wrapper';
+    var url = appConfig.apiBaseUrl + '/project/wrapper/:id';
     return $resource(url, {}, {
        show : { method: 'GET', params: {id: '@id'} }
     });
