@@ -40,7 +40,7 @@ services.factory('PersonProjectFactory', function ($resource, appConfig) {
 services.factory('DivisionFactory', function ($resource, appConfig) {
     var url = appConfig.apiBaseUrl + '/util/division';
     return $resource(url, {}, {
-        show: { method: 'GET', isArray: true, cache: false }
+        show: { method: 'GET', isArray: true, cache: true }
       });
 });
 
